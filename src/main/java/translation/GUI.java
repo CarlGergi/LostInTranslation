@@ -29,11 +29,24 @@ public class GUI {
             JButton submit = new JButton("Submit");
             buttonPanel.add(submit);
 
-            JLabel resultLabelText = new JLabel("Translation:");
-            buttonPanel.add(resultLabelText);
-            JLabel resultLabel = new JLabel("\t\t\t\t\t\t\t");
-            buttonPanel.add(resultLabel);
+            JPanel resultPanel = new JPanel();
+            resultPanel.add(new JLabel("Translation:"));
 
+            JLabel resultLabel = new JLabel("\t\t\t\t\t\t\t\t");
+            resultPanel.add(resultLabel);
+
+            JPanel mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+            mainPanel.add(countryPanel);
+            mainPanel.add(languagePanel);
+            mainPanel.add(buttonPanel);
+            mainPanel.add(resultPanel);
+
+            JFrame frame = new JFrame("Country Name Translator");
+            frame.setContentPane(mainPanel);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
 
             // adding listener for when the user clicks the submit button
             submit.addActionListener(new ActionListener() {
@@ -45,30 +58,20 @@ public class GUI {
                     // for now, just using our simple translator, but
                     // we'll need to use the real JSON version later.
                     Translator translator = new CanadaTranslator();
-
+                    
                     String result = translator.translate(country, language);
-                    if (result == null) {
+                    if (result == null || result.isEmpty()) {
                         result = "no translation found!";
-                    }
-                    resultLabel.setText(result);
+                    }   
 
+                    resultLabel.setText(result);
+                    // Force layout to accommodate new preferred size if needed
+                    resultPanel.revalidate();
+                    mainPanel.revalidate();
+                    frame.pack();   // <- key when initial size was too small
                 }
 
             });
-
-            JPanel mainPanel = new JPanel();
-            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.add(countryPanel);
-            mainPanel.add(languagePanel);
-            mainPanel.add(buttonPanel);
-
-            JFrame frame = new JFrame("Country Name Translator");
-            frame.setContentPane(mainPanel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setVisible(true);
-
-
         });
     }
 }
