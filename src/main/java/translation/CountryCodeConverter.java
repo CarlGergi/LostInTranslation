@@ -53,8 +53,8 @@ public class CountryCodeConverter {
                     country = parts[0].trim() + " " + parts[1].trim();
                     alpha3 = parts[3].trim();
                 }
-                countryCodeToCountry.put(alpha3, country);
-                countryToCountryCode.put(country, alpha3);
+                countryCodeToCountry.put(alpha3.toLowerCase(), country);
+                countryToCountryCode.put(country.toLowerCase(), alpha3.toLowerCase());
             }
         }
         catch (IOException | URISyntaxException ex) {
@@ -70,7 +70,7 @@ public class CountryCodeConverter {
      */
     public String fromCountryCode(String code) {
         if (code == null) return null;
-        return countryCodeToCountry.get(code.trim().toUpperCase());
+        return countryCodeToCountry.get(code.trim().toLowerCase());
     }
 
     /**
